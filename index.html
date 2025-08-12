@@ -4,6 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>SOAP API Playground</title>
+<!-- Add Font Awesome in <head> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
  body {
     font-family: Arial, sans-serif;
@@ -182,27 +184,29 @@ footer span {
 <!-- Home Page Options -->
 <div class="options-grid">
   <div class="card">
-    <div class="card-title">🧮 Calculator API</div>
+    <div class="card-title"><i class="fas fa-calculator"></i> Calculator API</div>
     <p>Perform basic arithmetic operations via SOAP requests.</p>
     <button onclick="openModal('calcModal')">Open</button>
   </div>
+  
   <div class="card">
-    <div class="card-title">🌡 Temperature API</div>
+    <div class="card-title"><i class="fas fa-temperature-high"></i> Temperature API</div>
     <p>Convert between Celsius & Fahrenheit easily.</p>
     <button onclick="openModal('tempModal')">Open</button>
   </div>
+  
   <div class="card">
-    <div class="card-title">🔢 Number Conversion API</div>
+    <div class="card-title"><i class="fas fa-sort-numeric-up"></i> Number Conversion API</div>
     <p>Convert numbers to words and vice versa.</p>
     <button onclick="openModal('numModal')">Open</button>
   </div>
+  
   <div class="card">
-    <div class="card-title">🌍 Country Info API</div>
+    <div class="card-title"><i class="fas fa-globe"></i> Country Info API</div>
     <p>Get country details using SOAP web services.</p>
     <button onclick="openModal('countryModal')">Open</button>
   </div>
 </div>
-
 <!-- Calculator Modal -->
 <div class="modal" id="calcModal">
   <div class="modal-content">
