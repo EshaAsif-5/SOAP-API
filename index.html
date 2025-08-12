@@ -1,0 +1,376 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SOAP API Playground</title>
+<style>
+ body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #dff6ff, #B0E0E6, #ADD8E6);
+    background-size: 300% 300%;
+    animation: gradientMove 10s ease infinite;
+    color: #1d3557;
+}
+
+header {
+    text-align: center;
+    padding: 50px 20px 20px;
+    color: #000080;
+}
+
+header h1 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1rem;
+    color: #0000CD;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    padding: 40px 20px;
+    max-width: 900px;
+    margin: auto;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #0047AB;
+    margin-bottom: 8px;
+}
+
+.card p {
+    font-size: 0.95rem;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.card button {
+    background: linear-gradient(45deg, #4682B4, #1E90FF);
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.card button:hover {
+    background: linear-gradient(45deg, #6A5ACD, #4169E1);
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.modal h2 {
+    margin-top: 0;
+    color: #0047AB;
+}
+
+.close-btn {
+    float: right;
+    cursor: pointer;
+    font-weight: bold;
+    color: #4682B4;
+    font-size: 1.2rem;
+}
+
+input,
+button.action-btn {
+    margin: 5px 3px;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+}
+
+input {
+    width: calc(50% - 10px);
+}
+
+button.action-btn {
+    background: #0071dc;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button.action-btn:hover {
+    background: #00509e;
+}
+
+.result {
+    background: #eef6ff;
+    padding: 6px;
+    border-radius: 4px;
+    display: inline-block;
+    min-width: 150px;
+    margin-top: 8px;
+    font-size: 0.9rem;
+}
+footer {
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 30px 20px;
+    
+    background: linear-gradient(135deg, rgba(16, 16, 16, 0.7), rgba(220, 220, 220, 0.7));
+    opacity: 0.5;
+    color: #120101; 
+}
+
+footer span {
+    color: #ed0707; 
+}
+@media (max-width: 768px) {
+    .options-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>SOAP API Playground</h1>
+  <p>Test & Explore Multiple SOAP APIs in One Place</p>
+</header>
+
+<!-- Home Page Options -->
+<div class="options-grid">
+  <div class="card">
+    <div class="card-title">🧮 Calculator API</div>
+    <p>Perform basic arithmetic operations via SOAP requests.</p>
+    <button onclick="openModal('calcModal')">Open</button>
+  </div>
+  <div class="card">
+    <div class="card-title">🌡 Temperature API</div>
+    <p>Convert between Celsius & Fahrenheit easily.</p>
+    <button onclick="openModal('tempModal')">Open</button>
+  </div>
+  <div class="card">
+    <div class="card-title">🔢 Number Conversion API</div>
+    <p>Convert numbers to words and vice versa.</p>
+    <button onclick="openModal('numModal')">Open</button>
+  </div>
+  <div class="card">
+    <div class="card-title">🌍 Country Info API</div>
+    <p>Get country details using SOAP web services.</p>
+    <button onclick="openModal('countryModal')">Open</button>
+  </div>
+</div>
+
+<!-- Calculator Modal -->
+<div class="modal" id="calcModal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal('calcModal')">&times;</span>
+    <h2>Calculator API</h2>
+    <input type="number" id="calcNum1" placeholder="First number" />
+    <input type="number" id="calcNum2" placeholder="Second number" /><br />
+    <button class="action-btn" onclick="callCalculator('Add')">Add</button>
+    <button class="action-btn" onclick="callCalculator('Subtract')">Subtract</button>
+    <button class="action-btn" onclick="callCalculator('Multiply')">Multiply</button>
+    <button class="action-btn" onclick="callCalculator('Divide')">Divide</button>
+    <p><strong>Result:</strong> <span id="calcResult" class="result"></span></p>
+  </div>
+</div>
+
+<!-- Temperature Modal -->
+<div class="modal" id="tempModal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal('tempModal')">&times;</span>
+    <h2>Temperature Conversion</h2>
+    <input type="number" id="tempValue" placeholder="Temperature" /><br />
+    <button class="action-btn" onclick="callTemp('CelsiusToFahrenheit')">C → F</button>
+    <button class="action-btn" onclick="callTemp('FahrenheitToCelsius')">F → C</button>
+    <p><strong>Result:</strong> <span id="tempResult" class="result"></span></p>
+  </div>
+</div>
+
+<!-- Number Conversion Modal -->
+<div class="modal" id="numModal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal('numModal')">&times;</span>
+    <h2>Number Conversion</h2>
+    <input type="number" id="numValue" placeholder="Number" /><br />
+    <button class="action-btn" onclick="callNumber('NumberToWords')">Number to Words</button>
+    <button class="action-btn" onclick="callNumber('NumberToDollars')">Number to Dollars</button>
+    <p><strong>Result:</strong> <span id="numResult" class="result"></span></p>
+  </div>
+</div>
+
+<!-- Country Info Modal -->
+<div class="modal" id="countryModal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal('countryModal')">&times;</span>
+    <h2>Country Info</h2>
+    <input type="text" id="countryCode" placeholder="Country code (e.g., US)" maxlength="2" /><br />
+    <button class="action-btn" onclick="callCountry('CapitalCity')">Get Capital</button>
+    <button class="action-btn" onclick="callCountry('FullCountryInfo')">Get Full Info</button>
+    <p><strong>Result:</strong> <span id="countryResult" class="result"></span></p>
+  </div>
+</div>
+
+<footer>
+  © 2025 SOAP API Playground — Crafted with <span>❤</span> for Developers
+</footer>
+
+<script>
+function openModal(id) {
+  document.getElementById(id).style.display = 'flex';
+}
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+async function sendSoap(apiUrl, action, xml, resultTag) {
+  try {
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(apiUrl)}`;
+    const res = await fetch(proxyUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/xml; charset=utf-8",
+        ...(action && { SOAPAction: action }),
+      },
+      body: xml,
+    });
+    const text = await res.text();
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(text, "text/xml");
+    const resultNode = xmlDoc.getElementsByTagNameNS("*", resultTag)[0];
+    return resultNode ? resultNode.textContent.trim() : "No value found";
+  } catch (err) {
+    return "Error: " + err.message;
+  }
+}
+
+async function callCalculator(op) {
+  const a = document.getElementById("calcNum1").value;
+  const b = document.getElementById("calcNum2").value;
+  const xml = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <${op} xmlns="http://tempuri.org/">
+      <intA>${a}</intA>
+      <intB>${b}</intB>
+    </${op}>
+  </soap:Body>
+</soap:Envelope>`;
+  document.getElementById("calcResult").textContent = await sendSoap(
+    "http://www.dneonline.com/calculator.asmx",
+    `http://tempuri.org/${op}`,
+    xml,
+    `${op}Result`
+  );
+}
+
+async function callTemp(op) {
+  const val = document.getElementById("tempValue").value;
+  const tag = op === "CelsiusToFahrenheit" ? "Celsius" : "Fahrenheit";
+  const xml = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <${op} xmlns="https://www.w3schools.com/xml/">
+      <${tag}>${val}</${tag}>
+    </${op}>
+  </soap:Body>
+</soap:Envelope>`;
+  document.getElementById("tempResult").textContent = await sendSoap(
+    "https://www.w3schools.com/xml/tempconvert.asmx",
+    `https://www.w3schools.com/xml/${op}`,
+    xml,
+    `${op}Result`
+  );
+}
+
+async function callNumber(op) {
+  const val = document.getElementById("numValue").value;
+  const tag = op === "NumberToWords" ? "ubiNum" : "dNum";
+  const xml = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <${op} xmlns="http://www.dataaccess.com/webservicesserver/">
+      <${tag}>${val}</${tag}>
+    </${op}>
+  </soap:Body>
+</soap:Envelope>`;
+  document.getElementById("numResult").textContent = await sendSoap(
+    "https://www.dataaccess.com/webservicesserver/numberconversion.wso",
+    `http://www.dataaccess.com/webservicesserver/${op}`,
+    xml,
+    `${op}Result`
+  );
+}
+
+async function callCountry(op) {
+  const iso = document.getElementById("countryCode").value;
+  const ns = "http://www.oorsprong.org/websamples.countryinfo";
+  const xml = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <${op} xmlns="${ns}">
+      <sCountryISOCode>${iso}</sCountryISOCode>
+    </${op}>
+  </soap:Body>
+</soap:Envelope>`;
+  const resultTag = op === "CapitalCity" ? "CapitalCityResult" : "FullCountryInfoResult";
+  document.getElementById("countryResult").textContent = await sendSoap(
+    "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso",
+    `${ns}/${op}`,
+    xml,
+    resultTag
+  );
+}
+</script>
+
+</body>
+</html>
