@@ -11,7 +11,7 @@ This project allows users to select different API functionalities (e.g., Calcula
   - Calculator API
   - Temperature Conversion API
   - Country Information API
-- **Professional Gradient UI** with hover effects.
+
 - **Real-time Results** displayed after API calls.
 
 ## 🛠 Technologies Used
